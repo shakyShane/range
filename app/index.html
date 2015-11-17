@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        body {
+            padding-top: 30px
+        }
+        .range {
+            width: 100%;
+            position: relative;
+            margin-bottom: 10px;
+            padding: 30px 0;
+        }
+        .range__events {
+            z-index: 1;
+            background: black;
+            opacity: .1;
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            cursor: pointer;
+        }
+        .range__bar {
+            background: red;
+            height: 5px;
+            width: 100%;
+            display: block;
+        }
+        .range__handle {
+            position: absolute;
+            top: 22px;
+            left: 0;
+            width: 20px;
+            height: 20px;
+            display: block;
+            background: black;
+            opacity: .2;
+        }
+        .range__handle.active {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+<div class="range" id="range">
+    <div class="range__bar"></div>
+    <span class="range__handle" id="handle"></span>
+    <div class="range__events" id="events"></div>
+</div>
+<input type="range" min="0" max="4" step="1" style="width: 500px;"/>
+<script src="dist/bundle.js"></script>
+</body>
+</html>
