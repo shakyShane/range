@@ -1,4 +1,4 @@
-export function create (box, handle, steps) {
+export default function create (box, handle, steps) {
 
     const inner = box.width - handle.width;
     const seg   = inner / (steps - 1);
@@ -18,7 +18,7 @@ export function create (box, handle, steps) {
      * @returns {number}
      */
     const stepFromOffset = (offset) => {
-        var nearest = Math.round((offset - handle.width/2) / seg);
+        const nearest = Math.round((offset - handle.width/2) / seg);
         if (nearest <= 0) {
             return 0;
         }
