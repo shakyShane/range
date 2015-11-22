@@ -12,6 +12,10 @@ import Rx     from 'rx';
  */
 const $wrapper         = document.querySelector('#range');
 const $handle          = document.querySelector('#handle');
+document.querySelector('#default')
+    .addEventListener('change', function (evt) {
+        console.log(evt.target.value);
+    });
 const activateHandle   = () => $handle.classList.add('active');
 const deactivateHandle = () => $handle.classList.remove('active');
 
@@ -31,7 +35,7 @@ const handle   = $handle.getBoundingClientRect();
  * we would like
  * @type {wrapper}
  */
-const range    = create(wrapper, handle, 5);
+const range    = create(wrapper, handle, 100, 200, 1);
 
 /**
  * We need an initial value to start with, which we could read from a
@@ -39,7 +43,7 @@ const range    = create(wrapper, handle, 5);
  * it hardcoded at 0
  * @type {number}
  */
-const initial  = 0;
+const initial  = 50;
 
 /**
  * Next, we need a way to keep track of the handles X position. Whenever
@@ -123,19 +127,27 @@ drag$
     .subscribe(handle$);
 
 /**
- * To finish up we need to solve 2 more problems. Firstly, we want to add a CSS
- * class to the handle whenever dragging begins (to show the user visually that the
- * handle is active) and then remove it when dragging has ended.
+ * To finish up we need to solve 2 more problems.
+ *
+ * Firstly, we want to add a CSS class to the handle whenever
+ * dragging begins (to show the user visually that the
+ * handle is active) and then remove that class when dragging has ended.
+ *
+ * Because a hot observable sequence can have many subscribers that all
+ * receive the same events, we can add another 1 to activate the handle,
  */
-MOUSE.down
-    .do(activateHandle)
-    .flatMap(MOUSE.up.take(1))
-    .do(deactivateHandle)
-    .subscribe();
+MOUSE.down.subscribe(activateHandle);
+/**
+ * ... and then a further one that fires once a mouse up has occurred (This is very
+ * similar how we setup the drag$ observable)
+ */
+MOUSE.down.flatMap(MOUSE.up.take(1)).subscribe(deactivateHandle);
 
-MOUSE.down
-    .flatMap(MOUSE.up.take(1))
-    .withLatestFrom(drag$, (_, left) => range.stepFromOffset(left))
+/**
+ * Finally, we need to actually produce a value that be used.
+ */
+MOUSE.down.flatMap(MOUSE.up.take(1))
+    .withLatestFrom(drag$, (_, left) => range.valueFromOffset(left))
     .do((x) => console.log('Value emitted', x))
     .subscribe();
 

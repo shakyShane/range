@@ -1,14 +1,15 @@
-export default function create (box, handle, steps) {
+export default function create (box, handle, min, max, step) {
 
+    const ceil  = Math.ceil(((max - min) + step) / step);
     const inner = box.width - handle.width;
-    const seg   = inner / (steps - 1);
+    const seg   = inner / (ceil - 1);
 
     /**
      * @param step
      * @returns {string}
      */
     const handleOffset = (step) => {
-        if (step > (steps - 1)) step = steps - 1;
+        if (step > (ceil - 1)) step = ceil - 1;
         if (step < 0) step = 0;
         return String(step * seg);
     };
@@ -22,15 +23,21 @@ export default function create (box, handle, steps) {
         if (nearest <= 0) {
             return 0;
         }
-        if (nearest >= steps - 1) {
-            return steps - 1;
+        if (nearest >= ceil - 1) {
+            return ceil - 1;
         }
         return nearest;
+    };
+
+    const valueFromOffset = (offset) => {
+        const nearest = stepFromOffset(offset);
+        return min + (nearest * step);
     };
 
     return {
         handleOffset,
         stepFromOffset,
+        valueFromOffset,
         handlePositionFromOffset: (offset) => handleOffset(stepFromOffset(offset))
     };
 }
