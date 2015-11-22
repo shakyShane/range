@@ -33,9 +33,8 @@ const handle   = $handle.getBoundingClientRect();
  * Now, we create an instance of the range caculator
  * by passing the bonding rect of the wrapper, handle & how many steps
  * we would like
- * @type {wrapper}
  */
-const range    = create(wrapper, handle, 100, 200, 1);
+const range    = create(wrapper, handle, 0, 100, 0.2);
 
 /**
  * We need an initial value to start with, which we could read from a
@@ -43,7 +42,7 @@ const range    = create(wrapper, handle, 100, 200, 1);
  * it hardcoded at 0
  * @type {number}
  */
-const initial  = 50;
+const initial  = 3;
 
 /**
  * Next, we need a way to keep track of the handles X position. Whenever
