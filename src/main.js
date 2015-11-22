@@ -2,7 +2,7 @@
  * First, we need to bring in the actions
  * & RXjs
  */
-import create from './actions';
+import create from './range';
 import Rx     from 'rx';
 
 /**
@@ -10,8 +10,8 @@ import Rx     from 'rx';
  * & the main events wrapper
  * @type {Element}
  */
-const $wrapper = document.querySelector('#events');
-const $handle  = document.querySelector('#handle');
+const $wrapper         = document.querySelector('#range');
+const $handle          = document.querySelector('#handle');
 const activateHandle   = () => $handle.classList.add('active');
 const deactivateHandle = () => $handle.classList.remove('active');
 
