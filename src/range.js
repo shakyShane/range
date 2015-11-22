@@ -11,7 +11,8 @@ export default function create (wrapper, handle, min, max, step) {
     /**
      * @type {number}
      */
-    const numSteps    = Math.ceil(((max - min) + step) / step);
+    const numSteps    = ((max - min) + step) / step;
+    const maxNearest  = Math.floor(numSteps) - 1;
     const innerWidth  = wrapper.width - handle.width;
     const segmentSize = innerWidth / (numSteps - 1);
 
@@ -20,8 +21,8 @@ export default function create (wrapper, handle, min, max, step) {
      * @returns {number}
      */
     const handleOffset = (step) => {
-        if (step > (numSteps - 1)) {
-            step = numSteps - 1;
+        if (step > (maxNearest)) {
+            step = maxNearest;
         }
         if (step < 0) {
             step = 0;
@@ -38,8 +39,8 @@ export default function create (wrapper, handle, min, max, step) {
         if (nearest <= 0) {
             return 0;
         }
-        if (nearest >= numSteps - 1) {
-            return numSteps - 1;
+        if (nearest >= maxNearest) {
+            return maxNearest;
         }
         return nearest;
     };

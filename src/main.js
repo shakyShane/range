@@ -34,7 +34,7 @@ const handle   = $handle.getBoundingClientRect();
  * by passing the bonding rect of the wrapper, handle & how many steps
  * we would like
  */
-const range    = create(wrapper, handle, 0, 100, 0.2);
+const range    = create(wrapper, handle, 1, 2, 1);
 
 /**
  * We need an initial value to start with, which we could read from a
@@ -42,7 +42,7 @@ const range    = create(wrapper, handle, 0, 100, 0.2);
  * it hardcoded at 0
  * @type {number}
  */
-const initial  = 3;
+const initial  = 0;
 
 /**
  * Next, we need a way to keep track of the handles X position. Whenever
@@ -144,6 +144,10 @@ MOUSE.down.flatMap(MOUSE.up.take(1)).subscribe(deactivateHandle);
 
 /**
  * Finally, we need to actually produce a value that be used.
+ * Once again with begin with a subscription to the mouse down
+ * event and wait until a mouse up. Then we use withLatestFrom(drag$)
+ * to get the current mouse left position and pass that along to our
+ * valueFromOffset() function that will return a value that the user expects
  */
 MOUSE.down.flatMap(MOUSE.up.take(1))
     .withLatestFrom(drag$, (_, left) => range.valueFromOffset(left))
