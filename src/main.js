@@ -6,16 +6,29 @@ import create from './range';
 import Rx     from 'rx';
 
 /**
- * Then we'll save a reference to only the handle
- * & the main events wrapper
+ * Next we need to access the main wrapper element & extract
+ * the data attributes required
+ * and the handle.
  * @type {Element}
  */
 const $wrapper         = document.querySelector('#range');
 const $handle          = document.querySelector('#handle');
+const min              = parseInt($wrapper.getAttribute('min'),  10);
+const max              = parseInt($wrapper.getAttribute('max'),  10);
+const step             = parseInt($wrapper.getAttribute('step')  || 1, 10);
+/**
+ * We need an initial value to start with, which we could read from a
+ * data-attribute or other config, but for this lesson we'll just keep
+ * it hardcoded at 0
+ * @type {number}
+ */
+const initial          = parseInt($wrapper.getAttribute('value') || Math.ceil(((max - min) / 2) + min), 10);
+
 document.querySelector('#default')
     .addEventListener('change', function (evt) {
         console.log(evt.target.value);
     });
+
 const activateHandle   = () => $handle.classList.add('active');
 const deactivateHandle = () => $handle.classList.remove('active');
 
@@ -30,19 +43,11 @@ const wrapper  = $wrapper.getBoundingClientRect();
 const handle   = $handle.getBoundingClientRect();
 
 /**
- * Now, we create an instance of the range caculator
+ * Now, we create an instance of the range calculator
  * by passing the bonding rect of the wrapper, handle & how many steps
  * we would like
  */
-const range    = create(wrapper, handle, 1, 2, 1);
-
-/**
- * We need an initial value to start with, which we could read from a
- * data-attribute or other config, but for this lesson we'll just keep
- * it hardcoded at 0
- * @type {number}
- */
-const initial  = 0;
+const range    = create(wrapper, handle, min, max, step);
 
 /**
  * Next, we need a way to keep track of the handles X position. Whenever
@@ -51,7 +56,8 @@ const initial  = 0;
  * a BehaviorSubject should represent a value that changes over time.
  * @type {Rx.BehaviorSubject}
  */
-const handle$  = new Rx.BehaviorSubject(range.handleOffset(initial));
+console.log(range.stepFromValue(12));
+const handle$  = new Rx.BehaviorSubject(range.handleOffset(range.stepFromValue(initial)));
 
 /**
  * Now because we have the BehaviorSubject, we can subscribe to it and

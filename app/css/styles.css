@@ -1,3 +1,6 @@
+* {
+    box-sizing: border-box;
+}
 body {
     padding-top: 30px
 }
@@ -12,7 +15,8 @@ body {
 }
 
 .range__bar {
-    background: red;
+    background: grey;
+    box-shadow: 1px 1px 3px black inset;
     height: 5px;
     width: 100%;
     border-radius: 8px;
@@ -22,13 +26,14 @@ body {
     position: absolute;
     top: calc(50% - 8px);
     left: 0;
-    width: 16px;
-    height: 16px;
+    width: 15px;
+    height: 15px;
     display: block;
-    background: grey;
+    background: linear-gradient(lightgrey, grey);
     border-radius: 50%;
+    border: 1px solid #4c4c4c
 }
 
 .range__handle.active {
-    background: black;
+    background: grey;
 }

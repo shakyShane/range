@@ -54,7 +54,22 @@ export default function create (wrapper, handle, min, max, step) {
         return min + (nearest * step);
     };
 
+    const stepFromValue = (value) => {
+        //console.log(value);
+        const nearest = Math.ceil((value - min) / step);
+
+        if (nearest <= 0) {
+            return 0;
+        }
+        if (nearest >= maxNearest) {
+            return maxNearest;
+        }
+
+        return nearest;
+    };
+
     return {
+        stepFromValue,
         handleOffset,
         stepFromOffset,
         valueFromOffset,
