@@ -2,7 +2,7 @@
  * First, we need to bring in the actions
  * & RXjs
  */
-import create from './range';
+import create from './range.simple';
 import Rx     from 'rx';
 
 /**
@@ -13,16 +13,13 @@ import Rx     from 'rx';
  */
 const $wrapper         = document.querySelector('#range');
 const $handle          = document.querySelector('#handle');
-const min              = parseInt($wrapper.getAttribute('min'),  10);
-const max              = parseInt($wrapper.getAttribute('max'),  10);
-const step             = parseInt($wrapper.getAttribute('step')  || 1, 10);
+
 /**
  * We need an initial value to start with, which we could read from a
  * data-attribute or other config, but for this lesson we'll just keep
  * it hardcoded at 0
  * @type {number}
  */
-const initial          = parseInt($wrapper.getAttribute('value') || Math.ceil(((max - min) / 2) + min), 10);
 
 document.querySelector('#default')
     .addEventListener('change', function (evt) {
@@ -47,7 +44,15 @@ const handle   = $handle.getBoundingClientRect();
  * by passing the bonding rect of the wrapper, handle & how many steps
  * we would like
  */
-const range    = create(wrapper, handle, min, max, step);
+const range    = create(wrapper, handle, 5);
+
+/**
+ * We need an initial value to start with, which we could read from a
+ * data-attribute or other config, but for this lesson we'll just keep
+ * it hardcoded at 0
+ * @type {number}
+ */
+const initial  = 2;
 
 /**
  * Next, we need a way to keep track of the handles X position. Whenever
@@ -56,8 +61,7 @@ const range    = create(wrapper, handle, min, max, step);
  * a BehaviorSubject should represent a value that changes over time.
  * @type {Rx.BehaviorSubject}
  */
-console.log(range.stepFromValue(12));
-const handle$  = new Rx.BehaviorSubject(range.handleOffset(range.stepFromValue(initial)));
+const handle$  = new Rx.BehaviorSubject(range.handleOffset(initial));
 
 /**
  * Now because we have the BehaviorSubject, we can subscribe to it and
@@ -156,7 +160,7 @@ MOUSE.down.flatMap(MOUSE.up.take(1)).subscribe(deactivateHandle);
  * valueFromOffset() function that will return a value that the user expects
  */
 MOUSE.down.flatMap(MOUSE.up.take(1))
-    .withLatestFrom(drag$, (_, left) => range.valueFromOffset(left))
+    .withLatestFrom(drag$, (_, left) => range.stepFromOffset(left))
     .do((x) => console.log('Value emitted', x))
     .subscribe();
 
